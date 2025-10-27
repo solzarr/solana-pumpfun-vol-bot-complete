@@ -7,7 +7,7 @@ import {
     TransactionInstruction, PublicKey,
     sendAndConfirmTransaction
 } from "@solana/web3.js"
-import { getAssociatedTokenAddress } from "@solana/spl-token";
+import { createCloseAccountInstruction, getAssociatedTokenAddress } from "@solana/spl-token";
 import { getSellTx } from "./src/getSellTx";
 import { execute } from "./src/execute";
 import { RPC_ENDPOINT, RPC_WEBSOCKET_ENDPOINT, BASEMINT, PRIVATE_KEY } from "./src/constants";
@@ -19,75 +19,87 @@ export const solanaConnection = new Connection(RPC_ENDPOINT, {
 const connection = new Connection(RPC_ENDPOINT, { commitment: "processed" });
 
 const main = async () => {
-    const walletsData = readJson()
-    const wallets = walletsData.map(({ privateKey }) => Keypair.fromSecretKey(base58.decode(privateKey)))
+    const walletsData = readJson();
+    const wallets = walletsData.map(({ privateKey }) => Keypair.fromSecretKey(base58.decode(privateKey)));
     const mainKp = createKeypairFromBase58(PRIVATE_KEY);
 
-    console.log("==== m a i n K P ===== > ", mainKp)
-    let ixs: TransactionInstruction[] = [];
+    // console.log("==== m a i n K P ===== > ", mainKp)
+
+
     try {
         for (let i = 0; i < wallets.length; i++) {
+            let ixs: TransactionInstruction[] = [];
             const userTokenAta = await getAssociatedTokenAddress(
                 new PublicKey(BASEMINT),
                 wallets[i].publicKey
             );
+
             const accountInfo = await connection.getAccountInfo(wallets[i].publicKey)
+            // console.log("account Info >>> ", accountInfo);
 
             const tokenBalance = await connection.getTokenAccountBalance(userTokenAta);
             console.log("token Balance ====>", tokenBalance);
+            console.log("Account index >>> ", i)
 
             let tokenAmount = Math.floor(Number(tokenBalance.value.uiAmount) * 10 ** Number(tokenBalance.value.decimals));
+            console.log("tokenAmount >>> ", tokenAmount);
 
             if (tokenAmount != 0) {
-                const sellTx = await getSellTx(wallets[i], new PublicKey(BASEMINT), BigInt(tokenAmount))
+                console.log("this is tokenAmount is not 0");
+                const sellTx = await getSellTx(wallets[i], new PublicKey(BASEMINT), BigInt(tokenAmount));
                 if (sellTx == null) {
                     throw new Error("Error getting sell tx")
                 }
                 const txSellSig = sellTx && await execute(sellTx, 1)
                 if (accountInfo) {
-                    const solBal = await connection.getBalance(wallets[i].publicKey)
+                    const solBal = await connection.getBalance(wallets[i].publicKey);
                     ixs.push(
                         SystemProgram.transfer({
                             fromPubkey: wallets[i].publicKey,
                             toPubkey: mainKp.publicKey,
-                            lamports: solBal
+                            lamports: solBal,
                         })
                     )
+
                 }
             } else {
+                console.log("This case is that amount eual 0!!!!!!!!!!!");
                 if (accountInfo) {
-                    const solBal = await connection.getBalance(wallets[i].publicKey)
+                    const solBal = await connection.getBalance(wallets[i].publicKey);
+                    console.log("index number >> ", i);
                     ixs.push(
                         SystemProgram.transfer({
                             fromPubkey: wallets[i].publicKey,
                             toPubkey: mainKp.publicKey,
-                            lamports: solBal
+                            lamports: solBal,
                         })
                     )
                 }
             }
 
             if (ixs.length) {
+                console.log("ixs length >>> ", ixs.length);
                 const tx = new Transaction().add(
-                    ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 220_000 }),
-                    ComputeBudgetProgram.setComputeUnitLimit({ units: 350_000 }),
+                    ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 200_000 }),
+                    ComputeBudgetProgram.setComputeUnitLimit({ units: 300_000 }),
                     ...ixs,
                 )
+                console.log("ixs length >>> ", ixs.length);
 
-                console.log("=========================================")
-                console.log(await connection.simulateTransaction(tx))
-                tx.feePayer = mainKp.publicKey
+                console.log("=========================================");
+                // console.log(await connection.simulateTransaction(tx))
+                // tx.feePayer = mainKp.publicKey;
                 tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
                 const sig = await sendAndConfirmTransaction(connection, tx, [mainKp, wallets[i]], { commitment: "confirmed" })
                 console.log(`Closed and gathered SOL from wallets ${i} : https://solscan.io/tx/${sig}`)
-                // return
+                // return i + 1;
             }
         }
 
         await sleep(1000);
 
     } catch (error) {
-        console.log("gathering error")
+        console.log("gathering error");
         return;
     }
 

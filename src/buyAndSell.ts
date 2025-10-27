@@ -38,12 +38,12 @@ export const buyAndSell = async (kp: Keypair[]) => {
                 console.log("----------- is buying ------------> ", isBuy);
 
                 // this is buy instructions
-                let buyTx = await getBuyTx(kp[0], basemint, amountSOL)
+                let buyTx = await getBuyTx(kp[index], basemint, amountSOL)
                 let buySignature = buyTx && await execute(buyTx, 1)
                 console.log(`wallet ${index}`, " : ", " buy ", ` sol_amount : ${amountSOL} `)
 
-
-            } else {
+            }
+            else {
                 console.log("----------- is selling ------------> ", !isBuy);
 
                 const token_amount = await randTokenAmount(basemint, new PublicKey(wallets[index].pubkey));
