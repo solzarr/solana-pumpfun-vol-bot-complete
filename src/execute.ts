@@ -15,16 +15,18 @@ export const execute = async (transaction: VersionedTransaction, isBuy: boolean 
         const signature = await connection.sendTransaction(transaction, {
             skipPreflight: true
         });
-
+        const latestBlockhash = await connection.getLatestBlockhash();
         console.log("signature >> ", signature);
 
-        const confirmation = await connection.confirmTransaction(signature);
+        // const confirmation = await connection.confirmTransaction(signature);
 
-        // const confirmation = await connection.confirmTransaction({
-        //     signature,
-        //     blockhash: latestBlockhash.blockhash,
-        //     lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
-        // }, "confirmed");
+        const confirmation = await connection.confirmTransaction({
+            signature,
+            blockhash: latestBlockhash.blockhash,
+            lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+        }, "confirmed");
+
+        console.log("confirmation >>> ==== ", confirmation);
 
         if (confirmation.value.err) {
             console.log("Confirmtaion error")

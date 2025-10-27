@@ -92,7 +92,6 @@ const main = async () => {
                 tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
                 const sig = await sendAndConfirmTransaction(connection, tx, [mainKp, wallets[i]], { commitment: "confirmed" })
                 console.log(`Closed and gathered SOL from wallets ${i} : https://solscan.io/tx/${sig}`)
-                // return i + 1;
             }
         }
 

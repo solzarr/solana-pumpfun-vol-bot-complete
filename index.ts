@@ -24,7 +24,6 @@ const main = async () => {
     // const connection = new Connection("https://api.devnet.solana.com", "confirmed");
     while (1) {
         distributeSuccess = await distributeSol(connection, feePayer, DISTRIBUTENUM);
-
         if (distributeSuccess) { break }
     }
 

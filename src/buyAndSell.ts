@@ -75,6 +75,8 @@ export const buyAndSell = async (kp: Keypair[]) => {
                     console.log("gbcs value >> ", new Decimal((virtualSol / BigInt(10 ** 9)).toString()).div(new Decimal((virtualToken / BigInt(10 ** 6)).toString())));
 
                     const price = new Decimal(virtualSol.toString()).div(new Decimal(virtualToken.toString()));
+                    console.log("Price =======>>>> ", price);
+
                     fs.appendFile(filePath, String("\n" + price.toString() + ","), (err) => {
                         if (err) {
                             console.error('Error writing file:', err);
@@ -137,11 +139,10 @@ const randInt = (min: number, max: number) => {
     return (Math.floor(Math.random() * (max - min + 1)) + min)
 }
 
-const randSOLAmount = () => randInt(BUY_AMOUNT_MIN, BUY_AMOUNT_MAX) / 10 //0.05SOL ~ 0.1SOL
+const randSOLAmount = () => randInt(BUY_AMOUNT_MIN, BUY_AMOUNT_MAX) / 10    // 0.05SOL ~ 0.1SOL
 
 const randTokenAmount = async (BASEMINT: PublicKey, wallet: PublicKey) => {
-    // console.log("basemint >> ", BASEMINT);
-    // console.log("wallet >> ", wallet);
+
     const tokenAta = await getAssociatedTokenAddress(BASEMINT, wallet);
     const amount = await connection.getTokenAccountBalance(tokenAta);
 

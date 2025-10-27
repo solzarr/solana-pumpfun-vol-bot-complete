@@ -34,6 +34,7 @@ export const distributeSol = async (connection: Connection, mainKp: Keypair, dis
             console.log("Main wallet balance is not enough")
             return []
         }
+
         let solAmount = DISTRIBUTE_AMOUNT * LAMPORTS_PER_SOL;
 
         if (dis_wallets.length == 0) {
@@ -100,6 +101,7 @@ export const distributeSol = async (connection: Connection, mainKp: Keypair, dis
 
         console.log(await connection.simulateTransaction(tx))
         tx.sign([mainKp])
+
         console.log("===============simulate==============")
         console.log(await connection.simulateTransaction(tx))
         transactions.push(tx);

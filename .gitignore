@@ -1,3 +1,4 @@
-env
+.env
 data.json
 node_modules
+result.txt
