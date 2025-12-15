@@ -38,6 +38,8 @@ For questions, support, or collaboration inquiries:
 
 **Telegram**: [@solzarr](https://t.me/solzarr)
 
+**X(Twitter)**: [@solzarr](https://x.com/solzarr)
+
 ## 📦 Installation
 
 ```bash
@@ -74,3 +76,4 @@ Custom features
 Performance optimization
 
 Private or enterprise deployment
+
