@@ -69,8 +69,9 @@ Private or enterprise deployment
 
 👉 If you are interested, feel free to DM me.
 
-🚀 **Telegram**: [@solzarr](https://t.me/solzarr)
-🔥 **X(Twitter)**: [@solzarr](https://x.com/solzarr)
+🚀 **Telegram** [@solzarr](https://t.me/solzarr)
+🔥 **X(Twitter)** [@solzarr](https://x.com/solzarr)
+
 
 
 
