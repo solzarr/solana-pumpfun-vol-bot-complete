@@ -30,6 +30,14 @@ Ideal for:
 - Solana Web3 SDK  
 - Optional Telegram bot integration
 
+## Support & Contact
+
+For questions, support, or collaboration inquiries:
+
+👉 If you are interested, feel free to DM me.
+
+**Telegram**: [@solzarr](https://t.me/solzarr)
+
 ## 📦 Installation
 
 ```bash
@@ -67,10 +75,9 @@ Performance optimization
 
 Private or enterprise deployment
 
-👉 If you are interested, feel free to DM me.
 
-🚀 **Telegram** [@solzarr](https://t.me/solzarr)
-🔥 **X(Twitter)** [@solzarr](https://x.com/solzarr)
+
+
 
 
 
