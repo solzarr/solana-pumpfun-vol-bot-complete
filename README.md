@@ -74,13 +74,3 @@ Custom features
 Performance optimization
 
 Private or enterprise deployment
-
-
-
-
-
-
-
-
-
-
